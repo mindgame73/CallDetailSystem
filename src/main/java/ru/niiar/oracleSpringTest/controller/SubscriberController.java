@@ -101,7 +101,7 @@ public class SubscriberController {
 
     @ResponseBody
     @RequestMapping(value="/subscribers/create", method = RequestMethod.POST)
-    public RedirectView createSubscriber(@RequestBody Subscriber subscriber){
+    public Subscriber createSubscriber(@RequestBody Subscriber subscriber){
         if (subscriber.getDivision().getDivision_id() == 0){
             subscriber.setDivision(null);
             subscriberRepository.save(subscriber);
@@ -110,6 +110,6 @@ public class SubscriberController {
         {
             subscriberRepository.save(subscriber);
         }
-        return new RedirectView("/subscribers?search=" + subscriber.getInternalNum());
+        return subscriber;
     }
 }

@@ -214,8 +214,9 @@
                 data: JSON.stringify(data),
                 dataType: 'json',
                 timeout: 600000,
-                success: function () {
+                success: function (p) {
                     $('#create-modal').modal('hide');
+                    window.location.href = "/subscribers"
                 },
                 error: function (jqXHR, exception) {
                     var msg = '';
