@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<th:block th:fragment="header">
+    <div class="preloader">
+        <div class="preloader__row">
+            <div class="preloader__item"></div>
+            <div class="preloader__item"></div>
+        </div>
+    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" th:href="@{/}">
+                    <img class="d-inline-block align-top" th:src="@{/images/logo.png}" th:height="50px" th:width="50px" alt=""/>
+                </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/index' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/index}"><i class="fas fa-home fa-2x"></i>Домашняя</a>
+                </li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/subscribers' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/subscribers}"><i class="fas fa-book fa-2x"></i> Справочник абонентов</a>
+                </li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/calldetails' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/calldetails}"><i class="fas fa-phone fa-2x"></i>Лог телефонных вызовов</a>
+                </li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/divisions' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/divisions}"><i class="fas fa-project-diagram fa-2x"></i>Подразделения</a>
+                </li>
+                <li class="nav-item" th:classappend="${#request.getRequestURI() == '/charts' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{/charts}"><i class="far fa-chart-bar fa-2x"></i> Отчеты</a>
+                </li>
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0" method="get" th:action="${#request.getRequestURI()}">
+                <i style="color:green" class="fas fa-filter fa-2x filter-button"></i>
+                <input class="form-control form-control-sm mr-sm-2" name="search" type="search" placeholder="Поиск" aria-label="Search">
+                <button class="btn btn-sm btn-success my-2" type="submit">Поиск</button>
+            </form>
+        </div>
+    </nav>
+</th:block>
+</body>
+</html>

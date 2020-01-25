@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container-fluid text-center">
+        <h1>Лог телефонных вызовов</h1>
+        <div class="table-responsive-sm">
+            <table style="font-size: 12px; margin-bottom: 50px" class="table table-hover table-light table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Номер в системе</th>
+                    <th>Время начала</th>
+                    <th>Время окончания</th>
+                    <th>Вся продолжительность (с)</th>
+                    <th>Продолжительность разговора (с)</th>
+                    <th>Номер исх</th>
+                    <th>Номер вх</th>
+                    <th>Точка монтирования А</th>
+                    <th>Точка монтирования Б</th>
+                    <th>Код завершения</th>
+                    <th>Таблица маршрутизации</th>
+                    <th>Поток</th>
+                    <th>Абонент</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cdr : ${cdrs}">
+                    <td th:text="${cdr.getCall_id()}"></td>
+                    <td th:text="${cdr.getBoard_cdr_id()}"></td>
+                    <td th:text="${cdr.getStartTime()}"></td>
+                    <td th:text="${cdr.getStopTime()}"></td>
+                    <td th:text="${cdr.getFullTime()}"></td>
+                    <td th:text="${cdr.getVoiceTime()}"></td>
+                    <td th:text="${cdr.getNumberA()}"></td>
+                    <td th:text="${cdr.getNumberB()}"></td>
+                    <td th:text="${cdr.getMount_a()}"></td>
+                    <td th:text="${cdr.getMount_b()}"></td>
+                    <td th:text="${cdr.getResultCode()}"></td>
+                    <td th:text="${cdr.getRoutingTable()}"></td>
+                    <td th:text="${cdr.getFlowPort()}"></td>
+
+                    <div th:if="${cdr.getSubscriber() != null}">
+                       <td><span th:text="${cdr.getSubscriber().getFullName()}"></span> <i style="color:green" class="fas fa-info-circle fa-2x"></i>
+                        <div class="user-info">
+                            ФИО: <span th:text="${cdr.getSubscriber().getFullName()}"></span>
+                            Подразделение: <span th:if="${cdr.getSubscriber().getDivision() != null}"><span th:text="${cdr.getSubscriber().getDivision().getDivisionName()}"></span></span>
+                            Внутренний номер: <span th:text="${cdr.getSubscriber().getInternalNum()}"></span>
+                        </div>
+                       </td>
+                    </div>
+                    <div th:unless="${cdr.getSubscriber() != null}">
+                        <td></td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

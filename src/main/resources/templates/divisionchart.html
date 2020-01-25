@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Test 2</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <script th:inline="javascript">
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', {'packages':['corechart']});
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Подразделение');
+            data.addColumn('number', 'Количество вызовов');
+            data.addRows([
+                [# th:each="divs : ${divisionCount}"]
+                [' [(${divs.divisionName})] ', [(${divs.totalCount})]],
+                [/]
+            ]);
+
+            // Set chart options
+            var options = {
+                title: "[(${chartTitle})]",
+                width: 1000,
+                height: 500,
+                bar: {groupWidth: "80%"},
+                legend: { position: "none" },
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+    <div class="container">
+        <form style="margin-top:15px" class="month-selector" action="/divisions/charts" method="get" enctype="utf8">
+            <div style="margin-bottom:5px" class="row">
+                <div class="col-2">
+                    <select th:name="monthId" class="form-control form-control-sm">
+                        <option value="01" selected="selected">Январь</option>
+                        <option value="02">Февраль</option>
+                        <option value="03">Март</option>
+                        <option value="04">Апрель</option>
+                        <option value="05">Май</option>
+                        <option value="06">Июнь</option>
+                        <option value="07">Июль</option>
+                        <option value="08">Август</option>
+                        <option value="09">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select th:name="year" class="form-control form-control-sm">
+                        <option value="2019">2019</option>
+                        <option value="2020" selected="selected">2020</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+                <input type="hidden" th:name="id" th:value="${idParam}">
+                <div class="col-2">
+                    <button type="submit" class="btn btn-sm btn-secondary">Фильтровать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="margin-bottom: 25px" id="chart_div"></div>
+    <div th:classappend="${showTable} ? 'show-table'" class="container-fluid text-center chart-table">
+        <h1>Лог телефонных вызовов</h1>
+        <div class="table-responsive-sm">
+            <table style="font-size: 12px; margin-bottom: 50px" class="table table-hover table-light table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Номер в системе</th>
+                    <th>Время начала</th>
+                    <th>Время окончания</th>
+                    <th>Вся продолжительность (с)</th>
+                    <th>Продолжительность разговора (с)</th>
+                    <th>Номер исх</th>
+                    <th>Номер вх</th>
+                    <th>Точка монтирования А</th>
+                    <th>Точка монтирования Б</th>
+                    <th>Код завершения</th>
+                    <th>Таблица маршрутизации</th>
+                    <th>Поток</th>
+                    <th>Абонент</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cdr : ${cdrs}">
+                    <td th:text="${cdr.getCall_id()}"></td>
+                    <td th:text="${cdr.getBoard_cdr_id()}"></td>
+                    <td th:text="${cdr.getStartTime()}"></td>
+                    <td th:text="${cdr.getStopTime()}"></td>
+                    <td th:text="${cdr.getFullTime()}"></td>
+                    <td th:text="${cdr.getVoiceTime()}"></td>
+                    <td th:text="${cdr.getNumberA()}"></td>
+                    <td th:text="${cdr.getNumberB()}"></td>
+                    <td th:text="${cdr.getMount_a()}"></td>
+                    <td th:text="${cdr.getMount_b()}"></td>
+                    <td th:text="${cdr.getResultCode()}"></td>
+                    <td th:text="${cdr.getRoutingTable()}"></td>
+                    <td th:text="${cdr.getFlowPort()}"></td>
+
+                    <div th:if="${cdr.getSubscriber() != null}">
+                        <td><span th:text="${cdr.getSubscriber().getFullName()}"></span> <i style="color:green" class="fas fa-info-circle fa-2x"></i>
+                            <div class="user-info">
+                                ФИО: <span th:text="${cdr.getSubscriber().getFullName()}"></span>
+                                Подразделение: <span th:if="${cdr.getSubscriber().getDivision() != null}"><span th:text="${cdr.getSubscriber().getDivision().getDivisionName()}"></span></span>
+                                Внутренний номер: <span th:text="${cdr.getSubscriber().getInternalNum()}"></span>
+                            </div>
+                        </td>
+                    </div>
+                    <div th:unless="${cdr.getSubscriber() != null}">
+                        <td></td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <h1>Отчеты</h1>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Просмотр отчетов системы</h5>
+                        <p class="card-text">Анализ вызовов подразделений по количеству вызовов. Составить график.
+                        Просмотр активности потоков.</p>
+                        <a href="/divisions/charts" class="btn btn-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div style="width:354px" class="card">
+                    <div style="width: 345px" class="card-body">
+                        <h5 class="card-title">Интеграция с ПАО "Ростелеком" <img th:src="@{/images/logo-rt.png}" th:height="25px" th:width="25px" alt=""/></h5>
+                        <p class="card-text"><a href="/upload">Загрузка детализации</a>, составление графика по направлениям, затратам. </p>
+                        <a href="/roschart" class="btn btn-primary">По затратам</a>
+                        <a style="margin-left: 25px" href="/routechart" class="btn btn-success">По направлениям</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

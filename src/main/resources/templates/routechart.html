@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Test 2</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <script th:inline="javascript">
+
+
+        google.charts.load('current', {'packages':['corechart']});
+
+
+        google.charts.setOnLoadCallback(drawChart);
+
+
+        function drawChart() {
+
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Подразделение');
+            data.addColumn('number', 'Стоимость вызовов');
+            data.addRows([
+                [# th:each="divs : ${divisionCount}"]
+                [' [(${divs.divisionName})] ', [(${divs.totalCount})]],
+                [/]
+            ]);
+
+
+            var options = {
+                title: "[(${chartTitle})]",
+                bar: {groupWidth: "80%"},
+                legend: { position: "right" },
+            };
+
+            var formatter = new google.visualization.NumberFormat({suffix: '₽'})
+            formatter.format(data,1);
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+    <div class="container">
+        <form style="margin-top:15px" class="month-selector" action="/routechart" method="get" enctype="utf8">
+            <div style="margin-bottom:5px" class="row">
+                <div class="col-2">
+                    <select th:name="monthId" class="form-control form-control-sm">
+                        <option value="01" selected="selected">Январь</option>
+                        <option value="02">Февраль</option>
+                        <option value="03">Март</option>
+                        <option value="04">Апрель</option>
+                        <option value="05">Май</option>
+                        <option value="06">Июнь</option>
+                        <option value="07">Июль</option>
+                        <option value="08">Август</option>
+                        <option value="09">Сентябрь</option>
+                        <option value="10">Октябрь</option>
+                        <option value="11">Ноябрь</option>
+                        <option value="12">Декабрь</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select th:name="year" class="form-control form-control-sm">
+                        <option value="2019">2019</option>
+                        <option value="2020" selected="selected">2020</option>
+                        <option value="2021">2021</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button type="submit" class="btn btn-sm btn-secondary">Фильтровать</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="margin-bottom: 25px; width: 1000px; height: 500px;" id="chart_div"></div>
+    <div th:classappend="${hidetable} ? 'hide-table'" class="container-fluid text-center">
+        <h1>Затраты по направлениям</h1>
+        <div class="table-responsive-sm">
+            <table style="font-size: 12px; margin-bottom: 50px" class="table table-hover table-light table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>Направление</th>
+                    <th>Сумма затрат, без НДС</th>
+                    <th>Построить диаграмму за направление</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="divs : ${divisionCount}">
+                    <td th:text="${divs.getDivisionName()}"></td>
+                    <td th:text="${divs.getTotalCount() + '₽'}"></td>
+                    <td><a th:href="@{/routechart(monthId=${#request.getParameter('monthId')},
+                    year=${#request.getParameter('year')},route=${divs.getDivisionName()})}"
+                           class="btn btn-primary"><i class="fas fa-chart-pie"></i></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
