@@ -37,6 +37,39 @@
             $(this).next('.user-info').show();
         });
 
+        $(document).on('click','.ajax-delete-sub', function () {
+            var id = $(this).parents('tr').attr('id');
+            $.ajax({
+                type: "GET",
+                url: "/subscribers/delete",
+                data: "id=" + id,
+                success: function (sub) {
+                    $('#del_sub_id').val(sub.sub_id);
+                    if (sub.fullName == null)
+                        var name = "";
+                    else
+                        var name = sub.fullName;
+                    if (sub.internalNum == null)
+                        var intNum = "";
+                    else
+                        var intNum = sub.internalNum;
+                    if (sub.externalNum == null)
+                        var extNum = "";
+                    else
+                        var extNum = sub.fullName;
+                    if (sub.division == null)
+                        var div = "";
+                    else
+                        var div = sub.division.divisionName;
+
+                    $('.modal-body-confirm').html("<strong style='color:red'>Подтвердите удаление абонента</strong><br><br><strong>ФИО: </strong>" + name + "<br>" +
+                        "<strong>Внутренний номер: </strong>" + intNum + "<br><strong>Внешний номер: </strong>" + extNum + "" +
+                        "<br><strong>Подразделение: </strong>" + div + "<br><br>");
+                    $('#delete-modal').modal();
+                }
+            });
+        });
+
         $(document).on('click','.ajax-edit-sub',function () {
             var id = $(this).parents('tr').attr('id');
             $.ajax({
@@ -154,7 +187,7 @@
                     else
                         var sip = "<i class='fas fa-minus'></i>";
                     var edit = "<a href= \"#\" class='btn btn-primary btn-sm ajax-edit-sub'><i class='fas fa-user-edit sm-2'></i></a>";
-                    var delet = "<a href= \"#\" class='btn btn-primary btn-sm'><i class='fas fa-user-times sm-2'></i></a>";
+                    var delet = "<a href= \"#\" class='btn btn-primary btn-sm ajax-delete-sub'><i class='fas fa-user-times sm-2'></i></a>";
 
 
                     row.innerHTML =
@@ -239,6 +272,21 @@
                 }
             });
 
+        });
+
+        $('#btn-delete').click(function () {
+            var data = {};
+            data["sub_id"] = $('#del_sub_id').val();
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/subscribers/delete",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function (p) {
+                    $('#delete-modal').modal('hide');
+                    $('#'+p.sub_id).html("");
+                }});
         });
 
         $('.fa-info-circle').mouseleave(function(){

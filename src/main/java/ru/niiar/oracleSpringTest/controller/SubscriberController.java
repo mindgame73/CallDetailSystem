@@ -112,4 +112,18 @@ public class SubscriberController {
         }
         return subscriber;
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/subscribers/delete", method = RequestMethod.GET)
+    public Subscriber getDeleteSub(@RequestParam Integer id, Model model){
+        Subscriber subscriber = subscriberRepository.findById(id).get();
+        return subscriber;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/subscribers/delete", method = RequestMethod.POST)
+    public Subscriber deleteSubscriber(@RequestBody Subscriber subscriber){
+        subscriberRepository.deleteById(subscriber.getSub_id());
+        return subscriber;
+    }
 }
