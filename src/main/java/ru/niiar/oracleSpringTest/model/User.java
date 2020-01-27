@@ -73,4 +73,14 @@ public class User{
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+    public boolean hasRole(String roleName){
+        boolean hasRole = false;
+        for (Role role : roles) {
+          if (role.getRoleName().equals(roleName)){
+              hasRole = true;
+          }
+        }
+        return hasRole;
+    }
 }

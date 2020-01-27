@@ -13,6 +13,25 @@ $('.fa-info-circle').mouseenter(function(){
     $(this).next('.user-info').show();
 });
 
+
+
+$(document).on('click','.ajax-delete-user', function () {
+    var id = $(this).parents('tr').attr('id');
+    $.ajax({
+        type: "GET",
+        url: "/admin/user",
+        data: "id=" + id,
+        success: function (user) {
+            $('#del_user_id').val(user.user_id);
+
+            $('.modal-body-confirm').html("<strong style='color:red'>Подтвердите удаление пользователя</strong><br><br>" +
+                "<strong>Имя пользователя </strong>" + user.userName + "<br><br>");
+            $('#delete-user-modal').modal();
+        }
+    });
+});
+
+
 $(document).on('click','.delete-ajax-div', function () {
     var id = $(this).parents('tr').attr('id');
     $.ajax({
@@ -156,6 +175,21 @@ $(document).on('click','.ajax-edit-div',function () {
     });
 });
 
+$('#btn-delete-user').click(function () {
+    var id = $('#del_user_id').val();
+    var data = {};
+    data["user_id"] = id;
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: "/admin/user",
+        data: JSON.stringify(data),
+        dataType: 'json',
+        success: function (d) {
+                $('#delete-user-modal').modal('hide');
+                $('#'+id).html("");
+        }});
+});
 
 $('#btn-delete-div').click(function () {
     var id = $('#del_div_id').val();
