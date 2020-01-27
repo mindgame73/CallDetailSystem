@@ -31,10 +31,28 @@
             $('.show-filter').show();
             $('.show-table').show();
             $('.hide-table').hide();
+
+
         });
 
         $('.fa-info-circle').mouseenter(function(){
             $(this).next('.user-info').show();
+        });
+
+        $(document).on('click','.delete-ajax-div', function () {
+            var id = $(this).parents('tr').attr('id');
+            $.ajax({
+                type: "GET",
+                url: "/divisions/delete",
+                data: "id=" + id,
+                success: function (div) {
+                    $('#del_div_id').val(div.division_id);
+
+                    $('.modal-body-confirm').html("<strong style='color:red'>Подтвердите удаление подразделения</strong><br><br>" +
+                        "<strong>Название подразделения: </strong>" + div.divisionName + "<br><br>");
+                    $('#delete-div-modal').modal();
+                }
+            });
         });
 
         $(document).on('click','.ajax-delete-sub', function () {
@@ -129,7 +147,7 @@
             });
         });
 
-        $('.ajax-sub-create').click(function () {
+        $(document).on('click','.ajax-sub-create',function () {
             $.ajax({
                 type: "GET",
                 url: "/divisions/ajax",
@@ -142,6 +160,86 @@
             });
 
             $('#create-modal').modal();
+        });
+
+        $(document).on('click','.ajax-div-create', function () {
+            $('.create-div')[0].reset();
+            $('#create-modal-div').modal();
+        });
+
+        $(document).on('click','.ajax-edit-div',function () {
+            var id = $(this).parents('tr').attr('id');
+            $.ajax({
+                type: "GET",
+                url: "/divisions/edit",
+                data: "id="+ id,
+                success: function(div){
+                    $('.edit-div')[0].reset();
+                    $('#_division_id').val(div.division_id);
+                    $('#_divisionName').val(div.divisionName);
+                    $('#edit-modal-div').modal();
+                }
+            });
+        });
+
+
+        $('#btn-delete-div').click(function () {
+            var id = $('#del_div_id').val();
+            var data = {};
+            data["division_id"] = id;
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/divisions/delete",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function (d) {
+                    if (d.length > 0){
+                        $('#delete-div-modal').modal('hide');
+                        var errorMsg = "";
+                        for (let i = 0; i<d.length; i++){
+                            errorMsg+= "<li>";
+                            if (d[i].fullName != null){
+                                errorMsg+= d[i].fullName + ", ";
+                            }
+                            if (d[i].internalNum != null){
+                                errorMsg+= d[i].internalNum + ", ";
+                            }
+                            if (d[i].externalNum != null){
+                                errorMsg+= d[i].externalNum + ", ";
+                            }
+                            errorMsg += d[i].division.divisionName + "</li>";
+                        }
+                        $('#error-body').html(errorMsg);
+                        $('#error-block').css('display','block');
+                    }
+                    else
+                    {
+                        $('#delete-div-modal').modal('hide');
+                        $('#'+id).html("");
+                    }
+
+                }});
+        });
+
+        $('#btn-edit-div').click(function () {
+            var data = {};
+            data['division_id'] = $('#_division_id').val();
+            data['divisionName'] = $('#_divisionName').val();
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/divisions/update",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                timeout: 600000,
+                success: function (d) {
+                    $('td[data-id=' + d.division_id + ']').html(d.divisionName);
+                    $('#edit-modal-div').modal('hide');
+                }
+            });
+
         });
 
         $('#btn-save').click(function () {
@@ -287,6 +385,25 @@
                     $('#delete-modal').modal('hide');
                     $('#'+p.sub_id).html("");
                 }});
+        });
+
+        $('#btn-create-div').click(function () {
+            var data = {};
+            data['divisionName'] = $('#c_divisionName').val();
+
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/divisions/create",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                timeout: 600000,
+                success: function (p) {
+                    $('#create-modal-div').modal('hide');
+                    window.location.href = "/divisions"
+                }
+            });
+
         });
 
         $('.fa-info-circle').mouseleave(function(){

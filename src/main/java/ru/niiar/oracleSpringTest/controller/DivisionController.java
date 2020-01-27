@@ -6,9 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.niiar.oracleSpringTest.dao.CallDetailRecordRepository;
 import ru.niiar.oracleSpringTest.dao.DivisionRepository;
+import ru.niiar.oracleSpringTest.dao.SubscriberRepository;
 import ru.niiar.oracleSpringTest.dto.DivisionCountDto;
 import ru.niiar.oracleSpringTest.model.CallDetailRecord;
 import ru.niiar.oracleSpringTest.model.Division;
+import ru.niiar.oracleSpringTest.model.Subscriber;
 import ru.niiar.oracleSpringTest.service.QueryDslService;
 
 import java.math.BigDecimal;
@@ -21,10 +23,13 @@ public class DivisionController {
     private DivisionRepository divisionRepository;
 
     @Autowired
-    QueryDslService queryDslService;
+    private QueryDslService queryDslService;
 
     @Autowired
-    CallDetailRecordRepository callDetailRecordRepository;
+    private CallDetailRecordRepository callDetailRecordRepository;
+
+    @Autowired
+    private SubscriberRepository subscriberRepository;
 
     @ResponseBody
     @RequestMapping(value="/divisions/ajax", method = RequestMethod.GET)
@@ -98,6 +103,48 @@ public class DivisionController {
             model.addAttribute("cdrs", cdrs);
 
             return "divisionchart";
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/divisions/create", method = RequestMethod.POST)
+    public Division createSubscriber(@RequestBody Division division){
+        divisionRepository.save(division);
+        return division;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/divisions/edit", method = RequestMethod.GET)
+    public Division getEditDivision(@RequestParam Integer id){
+        Division division = divisionRepository.findById(id).get();
+        return division;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/divisions/update", method = RequestMethod.POST)
+    public Division updateDivision(@RequestBody Division division){
+        divisionRepository.save(division);
+        return division;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/divisions/delete", method = RequestMethod.GET)
+    public Division getDeleteDiv(@RequestParam Integer id){
+        Division division = divisionRepository.findById(id).get();
+        return division;
+    }
+
+    @ResponseBody
+    @RequestMapping(value="/divisions/delete", method = RequestMethod.POST)
+    public List<Subscriber> deleteDivision(@RequestBody Division division, Model model){
+        List<Subscriber> relatedSubs = subscriberRepository.findAllByDivision(division);
+        if (relatedSubs.size() == 0){
+            divisionRepository.delete(division);
+            return relatedSubs;
+        }
+        else
+        {
+            return relatedSubs;
         }
     }
 

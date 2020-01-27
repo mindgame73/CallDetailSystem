@@ -8,10 +8,16 @@
 <body>
 <div layout:fragment="content" th:remove="tag">
     <div class="container-fluid text-right">
-        <a href="/divisions/add" class="btn btn-primary btn-sm"><i class="fas fa-user-plus ml-2">Добавить подразделение</i></a>
+        <a href="#" class="btn btn-primary btn-sm ajax-div-create"><i class="fas fa-user-plus ml-2">Добавить подразделение</i></a>
     </div>
     <div class="container-fluid text-center">
         <h1>Подразделения</h1>
+        <div id="error-block" style="text-align: left; display:none" class="alert alert-danger">
+            Невозможно удалить подразделение с привязанными абонентами, для начала необходимо перевести абонентов:
+            <ul id="error-body">
+
+            </ul>
+        </div>
         <div style="font-size: 12px; margin-bottom: 50px" class="table-responsive-sm table-bordered">
             <table class="table table-hover table-light table-sm">
                 <thead class="thead-light">
@@ -25,22 +31,96 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="division : ${divisions}">
+                <th:block th:each="division : ${divisions}">
+                <tr th:id="${division.getDivision_id()}">
                     <td th:text="${division.getDivision_id()}"></td>
-                    <td th:text="${division.getDivisionName()}"></td>
+                    <td th:attr="data-id=${division.getDivision_id()}" th:text="${division.getDivisionName()}"></td>
                     <td><a th:href="@{/divisions/charts(id=${division.getDivision_id()})}"
                            class="btn btn-primary"><i class="fas fa-chart-pie"></i></a></td>
                     <td><a th:href="@{/roschart(id=${division.getDivision_id()})}"
                            class="btn btn-primary"><i class="fas fa-ruble-sign"></i></a></td>
 
-                    <td><a th:href="@{/students/edit/{id}(id=${division.getDivision_id()})}"
-                           class="btn btn-primary"><i class="fas fa-user-edit"></i></a></td>
-                    <td><a
-                            th:href="@{/students/delete/{id}(id=${division.getDivision_id()})}"
-                            class="btn btn-primary"><i class="fas fa-user-times"></i></a></td>
+                    <td><a href="#"
+                           class="btn btn-primary ajax-edit-div"><i class="fas fa-user-edit"></i></a></td>
+                    <td><a href="#"
+                            class="btn btn-primary delete-ajax-div"><i class="fas fa-user-times "></i></a></td>
                 </tr>
+                </th:block>
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="modal fade" id="create-modal-div" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">Добавление подразделения</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="create-div">
+                        <div class="form-group row">
+                            <label for="c_divisionName" class="col-sm-6 col-form-label">Название подразделения</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="c_divisionName">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="btn-create-div" class="btn btn-primary">Добавить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="edit-modal-div" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel2">Изменить название подразделения</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="edit-div">
+                        <div class="form-group row">
+                            <label for="_divisionName" class="col-sm-6 col-form-label">Название подразделения</label>
+                            <div class="col-sm-6">
+                                <input type="hidden" id="_division_id">
+                                <input type="text" class="form-control" id="_divisionName">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="btn-edit-div" class="btn btn-primary">Подтвердить изменения</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="delete-div-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Удаление подразделения</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div style="text-align: center" class="modal-body-confirm">
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="del_div_id">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    <button type="button" id="btn-delete-div" class="btn btn-primary">Подтвердить удаление</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
