@@ -48,9 +48,11 @@
                     <div th:if="${cdr.getSubscriber() != null}">
                        <td><span th:text="${cdr.getSubscriber().getFullName()}"></span> <i style="color:green" class="fas fa-info-circle fa-2x"></i>
                         <div class="user-info">
-                            ФИО: <span th:text="${cdr.getSubscriber().getFullName()}"></span>
-                            Подразделение: <span th:if="${cdr.getSubscriber().getDivision() != null}"><span th:text="${cdr.getSubscriber().getDivision().getDivisionName()}"></span></span>
-                            Внутренний номер: <span th:text="${cdr.getSubscriber().getInternalNum()}"></span>
+                            <strong>ФИО: </strong><span th:text="${cdr.getSubscriber().getFullName()}"></span><br>
+                            <strong>Внутренний номер: </strong><span th:text="${cdr.getSubscriber().getInternalNum()}"></span><br>
+                                <strong>Внешний номер: </strong><span th:text="${cdr.getSubscriber().getExternalNum()}"></span><br>
+                                    <strong>Подразделение: </strong><span th:if="${cdr.getSubscriber().getDivision() != null}"><span th:text="${cdr.getSubscriber().getDivision().getDivisionName()}"></span></span>
+
                         </div>
                        </td>
                     </div>

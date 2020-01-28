@@ -23,7 +23,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String getAdminPage(Model model){
-        model.addAttribute("users", userRepository.findAllByOrderByEnabledDesc());
+        model.addAttribute("users", userRepository.findAll());
         return "admin";
     }
 

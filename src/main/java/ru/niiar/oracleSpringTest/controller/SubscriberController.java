@@ -29,10 +29,14 @@ public class SubscriberController {
 
 
     @RequestMapping(value = "/subscribers", method = RequestMethod.GET)
-    public String getSubscribers(@RequestParam(required = false) String search,  Model model) {
+    public String getSubscribers(@RequestParam(required = false) String search,
+                                 @RequestParam(required = false) Integer divId, Model model) {
         model.addAttribute("filterSub", new Subscriber());
         model.addAttribute("divisions", divisionRepository.findAllByOrderByDivisionNameAsc());
-        if (search == null)
+        if (divId != null){
+            model.addAttribute("subscribers",subscriberRepository.findAllByDivision(divisionRepository.findById(divId).get()));
+        }
+        else if (search == null)
             model.addAttribute("subscribers", subscriberRepository.findTop100ByOrderByInternalNumAsc());
         else
         {
@@ -54,6 +58,7 @@ public class SubscriberController {
         }
         return "subscribers";
     }
+
 
     @RequestMapping(value = "/subscribers", method = RequestMethod.POST)
     public String getSubscriberFilter(@ModelAttribute("filterSub") Subscriber filterSub, Model model,

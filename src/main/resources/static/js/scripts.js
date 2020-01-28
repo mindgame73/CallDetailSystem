@@ -67,7 +67,7 @@ $(document).on('click','.ajax-delete-sub', function () {
             if (sub.externalNum == null)
                 var extNum = "";
             else
-                var extNum = sub.fullName;
+                var extNum = sub.externalNum;
             if (sub.division == null)
                 var div = "";
             else

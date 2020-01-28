@@ -18,5 +18,7 @@ public interface CallDetailRecordRepository extends CrudRepository<CallDetailRec
     Iterable<CallDetailRecord> findAllByNumberAOrNumberB(Long numberA, Long numberB);
     Iterable<CallDetailRecord> findAllBySubscriberFullNameContains(String fullName);
     List<CallDetailRecord> findAllBySubscriberDivision(Division division);
+    List<CallDetailRecord> findAllBySubscriberDivisionOrderByStartTime(Division division);
+
 
 }

@@ -15,7 +15,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Имя пользователя</th>
-                    <th>Активность</th>
+                    <th>Подтверждение аккаунта</th>
                     <th>Роли</th>
                     <th>Удалить</th>
                 </tr>
@@ -33,11 +33,11 @@
                     </th:block>
                             <td>
                             <th:block th:if="${user.hasRole('ROLE_ADMIN')}">
-                                <span>ROLE_ADMIN</span>
+                                <span>Администратор</span>
                                 <a th:href="@{/admin/setrole(userId=${user.getUser_id()},roleName='ROLE_ADMIN',flag=false)}"><i style="color:red" class="fas fa-plus"></i></a>
                             </th:block>
                             <th:block th:unless="${user.hasRole('ROLE_ADMIN')}">
-                                <span>ROLE_ADMIN</span>
+                                <span>Администратор</span>
                                 <a th:href="@{/admin/setrole(userId=${user.getUser_id()},roleName='ROLE_ADMIN',flag=true)}"><i class="fas fa-minus"></i></a>
                             </th:block>
                     </td>
