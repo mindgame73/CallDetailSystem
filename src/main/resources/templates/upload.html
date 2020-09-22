@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <h1>Загрузите файл детализации с расширением .csv</h1>
+<form method="POST" enctype="multipart/form-data"
+      action="/upload">
+    Обзор: <input type="file" name="file"><br />
+    <input class="btn btn-success" type="submit" value="Загрузить">
+</form>
+    </div>
+</div>
+</body>
+</html>

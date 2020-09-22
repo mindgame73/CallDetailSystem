@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+<form method="GET"
+      action="/import">
+    <input name="action" value="import" type="hidden">
+    <input type="submit" class="btn btn-success"value="Импортировать в базу данных">
+</form>
+    </div>
+    <div class="container-fluid text-center">
+        <h1>Детализация ПАО "Ростелеком"</h1>
+        <div class="table-responsive-sm">
+            <table style="font-size: 12px; margin-bottom: 50px" class="table table-hover table-light table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>Абонент</th>
+                    <th>Время вызова</th>
+                    <th>Вызываемый абонент</th>
+                    <th>Направление вызова</th>
+                    <th>Продолжительность разговора (мин)</th>
+                    <th>Стоимость (без НДС)</th>
+                    <th>Данные абонента</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="ros : ${rosDetalizations}">
+                    <td th:text="${ros.getNumberA()}"></td>
+                    <td th:text="${ros.getDateTime()}"></td>
+                    <td th:text="${ros.getNumberB()}"></td>
+                    <td th:text="${ros.getRoute()}"></td>
+                    <td th:text="${ros.getDuration()} + ' мин'"></td>
+                    <td th:text="${ros.getCost()} + ' ₽'"></td>
+
+                    <div th:if="${ros.getSubscriber() != null}">
+                        <td><span th:text="${ros.getSubscriber().getFullName()}"></span> <i style="color:green" class="fas fa-info-circle fa-2x"></i>
+                            <div class="user-info">
+                                ФИО: <span th:text="${ros.getSubscriber().getFullName()}"></span>
+                                Подразделение: <span th:if="${ros.getSubscriber().getDivision() != null}"><span th:text="${ros.getSubscriber().getDivision().getDivisionName()}"></span></span>
+                                Внутренний номер: <span th:text="${ros.getSubscriber().getInternalNum()}"></span>
+                            </div>
+                        </td>
+                    </div>
+                    <div th:unless="${ros.getSubscriber() != null}">
+                        <td></td>
+                    </div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

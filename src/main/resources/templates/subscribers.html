@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container-fluid text-right">
+        <a href="#" class="btn btn-primary btn-sm ajax-sub-create"><i class="fas fa-user-plus ml-2">Добавить абонента</i></a>
+    </div>
+    <h1 style="text-align:center">Справочник абонентов</h1>
+    <div class="container-fluid text-center">
+        <form th:classappend="${showFilter} ? 'show-filter'" class="filter-form" action="/subscribers" th:object="${filterSub}" method="post" enctype="utf8" style="margin-bottom:5px">
+            <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                <ul>
+                    <li style="font-size:14px; color:red" th:each="error : ${#fields.errors()}" th:text="${error}"></li>
+                </ul>
+                <p style="font-size:14px; color:red"  th:each="error : ${#fields.errors('internalNum')}" th:text="${error}"></p>
+                <p style="font-size:14px; color:red"  th:each="error : ${#fields.errors('externalNum')}" th:text="${error}"></p>
+            </div>
+            <div style="margin-bottom:5px" class="row">
+                <div class="col">
+                    <input type="text" th:field="*{fullName}" class="form-control form-control-sm" placeholder="Полное имя">
+                </div>
+                <div class="col">
+                    <input type="text" th:field="*{internalNum}" class="form-control form-control-sm" placeholder="Внутренний номер">
+                </div>
+                <div class="col">
+                    <input type="text" th:field="*{externalNum}" class="form-control form-control-sm" placeholder="Внешний номер">
+                </div>
+                <div class="col">
+                    <input type="text" th:field="*{building}" class="form-control form-control-sm" placeholder="Здание">
+                </div>
+                <div class="col">
+                    <input type="text" th:field="*{room}" class="form-control form-control-sm" placeholder="Помещение">
+                </div>
+                <div class="col">
+                    <select th:field="*{division.division_id}" class="form-control form-control-sm">
+                        <option value="0" selected="selected">Подразделение</option>
+                        <option th:each="division : ${divisions}" th:value="${division.getDivision_id()}" th:text="${division.getDivisionName()}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <input type="text" th:field="*{subDescr}" class="form-control form-control-sm" placeholder="Инфо">
+                </div>
+                <div class="col-2">
+                    <input type="text" th:field="*{gpStrip}" class="form-control form-control-sm" placeholder="Громполоса">
+                </div>
+                <div class="col-2">
+                    <input type="text" th:field="*{allocation}" class="form-control form-control-sm" placeholder="Распределение">
+                </div>
+
+                <div class="col-2">
+                    <input type="text" th:field="*{cos}" class="form-control form-control-sm" placeholder="COS">
+                </div>
+                <div class="col">
+                    <input class="form-check-input" th:field="*{digital}" type="checkbox" id="inlineCheckbox1" value="option1">
+                    <label class="form-check-label" for="inlineCheckbox1">Цифровой</label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" th:field="*{fax}" type="checkbox" id="inlineCheckbox2" value="option1">
+                    <label class="form-check-label" for="inlineCheckbox2">Факс</label>
+                </div>
+                <div class="col">
+                    <input class="form-check-input" th:field="*{sip}" type="checkbox" id="inlineCheckbox3" value="option1">
+                    <label class="form-check-label" for="inlineCheckbox3">SIP</label>
+                </div>
+                <div class="col">
+                    <button type="submit" class="btn btn-sm btn-secondary">Фильтровать</button>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive-sm">
+            <table style="font-size: 12px; margin-bottom: 50px" class="table table-hover table-light table-sm">
+                <thead class="thead-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Полное имя</th>
+                    <th>Внутренний номер</th>
+                    <th>Внешний номер</th>
+                    <th>Здание</th>
+                    <th>Помещение</th>
+                    <th>Подразделение</th>
+                    <th>Инфо</th>
+                    <th>ГП</th>
+                    <th>Распределение</th>
+                    <th>Цифровой аппарат</th>
+                    <th>COS</th>
+                    <th>Факс</th>
+                    <th>SIP</th>
+                    <th>Изменить</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="subscriber : ${subscribers}">
+                <tr th:id="${subscriber.getSub_id()}">
+                    <td th:text="${subscriber.getSub_id()}"></td>
+                    <td th:text="${subscriber.getFullName()}"></td>
+                    <td th:text="${subscriber.getInternalNum()}"></td>
+                    <td th:text="${subscriber.getExternalNum()}"></td>
+                    <td th:text="${subscriber.getBuilding()}"></td>
+                    <td th:text="${subscriber.getRoom()}"></td>
+                    <div th:if="${subscriber.getDivision() != null}">
+                        <td th:text="${subscriber.getDivision().getDivisionName()}"></td>
+                    </div>
+                    <div th:unless="${subscriber.getDivision() != null}">
+                        <td></td>
+                    </div>
+                    <td th:text="${subscriber.getSubDescr()}"></td>
+                    <td th:text="${subscriber.getGpStrip()}"></td>
+                    <td th:text="${subscriber.getAllocation()}"></td>
+                    <td th:if="${subscriber.isDigital()}"><i class="fas fa-plus"></i></td>
+                    <td th:if="${!subscriber.isDigital()}"><i class="fas fa-minus"></i></td>
+                    <td th:text="${subscriber.getCos()}"></td>
+                    <td th:if="${subscriber.isFax()}"><i class="fas fa-plus"></i></td>
+                    <td th:if="${!subscriber.isFax()}"><i class="fas fa-minus"></i></td>
+                    <td th:if="${subscriber.isSip()}"><i class="fas fa-plus"></i></td>
+                    <td th:if="${!subscriber.isSip()}"><i class="fas fa-minus"></i></td>
+
+                    <td><a href="#"
+                           class="btn btn-primary btn-sm ajax-edit-sub"><i class="fas fa-user-edit sm-2"></i></a></td>
+                    <td><a href="#"
+                            class="btn btn-primary btn-sm ajax-delete-sub"><i class="fas fa-user-times sm-2"></i></a></td>
+                </tr>
+                </th:block>
+                </tbody>
+            </table>
+            <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Редактирование данных абонента</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="edit-form">
+                                <input type="hidden" id="sub_id">
+                                <div class="form-group row">
+                                    <label for="_fullName" class="col-sm-6 col-form-label">Полное имя</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_fullName">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_internalNum" class="col-sm-6 col-form-label">Внутренний номер</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_internalNum">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_externalNum" class="col-sm-6 col-form-label">Внешний номер</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_externalNum">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_building" class="col-sm-6 col-form-label">Здание</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_building">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_room" class="col-sm-6 col-form-label">Помещение</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_room">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_division" class="col-sm-6 col-form-label">Подразделение</label>
+                                    <div class="col-sm-6">
+                                        <select  class="form-control form-control-sm" id="_division">
+                                            <option value="0" selected="selected">Подразделение</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_info" class="col-sm-6 col-form-label">Инфо</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_info">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_gpStrip" class="col-sm-6 col-form-label">Громполоса</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_gpStrip">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_allocation" class="col-sm-6 col-form-label">Распределение</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_allocation">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="_cos" class="col-sm-6 col-form-label">COS</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="_cos">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="_isDigital">
+                                            <label class="form-check-label" for="_isDigital">
+                                                Цифровой аппарат
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="_isFax">
+                                            <label class="form-check-label" for="_isFax">
+                                                Факс
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="_isSip">
+                                            <label class="form-check-label" for="_isSip">
+                                                SIP
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                            <button type="button" id="btn-save" class="btn btn-primary">Сохранить изменения</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel1">Добавление абонента в справочник</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="edit-form">
+                                <div class="form-group row">
+                                    <label for="c_fullName" class="col-sm-6 col-form-label">Полное имя</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="Иванов В.В" class="form-control" id="c_fullName">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_internalNum" class="col-sm-6 col-form-label">Внутренний номер</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="4444"  class="form-control" id="c_internalNum">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_externalNum" class="col-sm-6 col-form-label">Внешний номер</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" placeholder="8423599999" class="form-control" id="c_externalNum">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_building" class="col-sm-6 col-form-label">Здание</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_building">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_room" class="col-sm-6 col-form-label">Помещение</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_room">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_division" class="col-sm-6 col-form-label">Подразделение</label>
+                                    <div class="col-sm-6">
+                                        <select  class="form-control form-control-sm" id="c_division">
+                                            <option value="0" selected="selected">Подразделение</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_info" class="col-sm-6 col-form-label">Инфо</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_info">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_gpStrip" class="col-sm-6 col-form-label">Громполоса</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_gpStrip">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_allocation" class="col-sm-6 col-form-label">Распределение</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_allocation">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="c_cos" class="col-sm-6 col-form-label">COS</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="c_cos">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="c_isDigital">
+                                            <label class="form-check-label" for="c_isDigital">
+                                                Цифровой аппарат
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="c_isFax">
+                                            <label class="form-check-label" for="c_isFax">
+                                                Факс
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="c_isSip">
+                                            <label class="form-check-label" for="c_isSip">
+                                                SIP
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                            <button type="button" id="btn-create" class="btn btn-primary">Добавить</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Удаление абонента</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body-confirm">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="hidden" id="del_sub_id">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                            <button type="button" id="btn-delete" class="btn btn-primary">Подтвердить удаление</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

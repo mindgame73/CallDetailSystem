@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{fragments/layout}">
+<head>
+    <title>Index</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="container">
+        <h1>Добро пожаловать!</h1>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Подразделения</h5>
+                        <p class="card-text">Анализ вызовов подразделений по направлениям, длительности. Составить график.</p>
+                        <a href="/divisions/charts" class="btn btn-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Потоки стандарта E1</h5>
+                        <p class="card-text">Произвести анализ работы поточного оборудования, просмотр активности и др.</p>
+                        <a href="#" class="btn btn-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Интеграция с ПАО "Ростелеком" <img th:src="@{/images/logo-rt.png}" th:height="25px" th:width="25px" alt=""/></h5>
+                        <p class="card-text">Загрузка детализации полученной от поставщика услуг, для дальнейшей ее обработки, отображения и распределения затрат</p>
+                        <a href="/roschart" class="btn btn-success">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
