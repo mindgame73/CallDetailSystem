@@ -15,10 +15,10 @@ public class CallDetailRecord {
     @Column
     private int board_cdr_id;
 
-    @Column(name="start_time", columnDefinition = "Timestamp")
+    @Column(name="start_time")
     private String startTime;
 
-    @Column(name="stop_time", columnDefinition = "Timestamp")
+    @Column(name="stop_time")
     private String stopTime;
 
     @Column(name="full_duration")

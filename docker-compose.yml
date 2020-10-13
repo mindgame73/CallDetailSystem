@@ -1,0 +1,13 @@
+version: '3.3'
+services:
+  mysql-cdr:
+    image: mysql:5.7.21
+    container_name: mysql-niiar
+    restart: always
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=niiar
+      - MYSQL_USER=niiar
+      - MYSQL_PASSWORD=632266811
+    ports:
+      - 3306:3306
