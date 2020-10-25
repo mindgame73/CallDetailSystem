@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    <changeSet id="create-table-persistent-logins" author="Rinat Ibragimov">
+        <comment>Create table persistent logins for remember me feature</comment>
+        <createTable tableName="persistent_logins">
+            <column name="username" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="series" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_used" type="Date">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="add-admin-account" author="Rinat Ibragimov">
+        <comment>admin account with password 123123aA</comment>
+        <sql>
+            insert into users (USER_NAME, ENCRYPTED_PASSWORD, ENABLED)
+            values ('admin', '$2a$10$W69aVkDdVaokr.wHKh/biOBwGX9z5oLYFh2dwpnyGcuixT630aa0G', 1);
+        </sql>
+    </changeSet>
+    <changeSet id="add-roles" author="Rinat Ibragimov">
+        <comment>Add ROLE_ADMIN and ROLE_USER</comment>
+        <sql>
+            insert into roles (ROLE_ID, ROLE_NAME)
+            values (1, 'ROLE_ADMIN');
+
+            insert into roles (ROLE_ID, ROLE_NAME)
+            values (2, 'ROLE_USER');
+        </sql>
+    </changeSet>
+    <changeSet id="set-admin-role-to-admin-account" author="Rinat Ibragimov">
+        <comment>Set ROLE_ADMIN to admin account</comment>
+        <sql>
+            insert into user_roles (USER_ID, ROLE_ID)
+            values ((select USER_ID from users where USER_NAME = 'admin'),  1);
+        </sql>
+    </changeSet>
+    <changeSet id="set-admin-role-to-admin-account" author="Rinat Ibragimov">
+        <comment>Set ROLE_ADMIN to admin account</comment>
+        <sql>
+            insert into user_roles (USER_ID, ROLE_ID)
+            values ((select USER_ID from users where USER_NAME = 'admin'),  1);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.2'
 services:
   mysql-cdr:
     image: mysql:5.7.21
@@ -11,3 +11,15 @@ services:
       - MYSQL_PASSWORD=632266811
     ports:
       - 3306:3306
+  app:
+    build: .
+    container_name: cdr-niiar
+    image: call_detail_system
+    volumes:
+    - "${CDR_ROOT_DIRECTORY}:/home/cdr/"
+    environment:
+      - SPRING_PROFILES_ACTIVE=CONTAINER
+    ports:
+    - 8080:8080
+    depends_on:
+      - mysql-cdr
