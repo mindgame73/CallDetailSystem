@@ -5,24 +5,21 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity(name="call_detail_records")
 @Getter
 @Setter
-public class CallDetailRecord {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer call_id;
+public class CallDetailRecord extends BaseEntity{
 
     @Column
     private int board_cdr_id;
 
     @Column(name="start_time")
-    private String startTime;
+    private LocalDateTime startTime;
 
     @Column(name="stop_time")
-    private String stopTime;
+    private LocalDateTime stopTime;
 
     @Column(name="full_duration")
     private int fullTime;
@@ -46,7 +43,7 @@ public class CallDetailRecord {
     private String resultCode;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="result_id", referencedColumnName = "result_id")
+    @JoinColumn(name="result_id", referencedColumnName = "id")
     private ResultCode resultCodeObj;
 
     @Column(name="routing_table")
@@ -56,11 +53,11 @@ public class CallDetailRecord {
     private int flowPort;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="subB_id", referencedColumnName = "sub_id")
+    @JoinColumn(name="subB_id", referencedColumnName = "id")
     private Subscriber subscriberB;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="subA_id", referencedColumnName = "sub_id")
+    @JoinColumn(name="subA_id", referencedColumnName = "id")
     private Subscriber subscriberA;
 }
 

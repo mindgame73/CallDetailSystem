@@ -40,7 +40,7 @@ public class RosDetalizationWrapper {
         for (RosDetalization ros : rosDetalizations) {
             row = sheet.createRow(countRow);
             row.createCell(0).setCellValue(ros.getNumberA());
-            row.createCell(1).setCellValue(ros.getDateTime());
+            row.createCell(1).setCellValue(ros.getDateTime().toString());
             row.createCell(2).setCellValue(ros.getNumberB());
             row.createCell(3).setCellValue(ros.getRoute());
             row.createCell(4).setCellValue(ros.getDuration());

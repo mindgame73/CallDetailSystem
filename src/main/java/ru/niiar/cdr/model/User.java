@@ -10,11 +10,7 @@ import java.util.Set;
 @Entity(name="users")
 @Getter
 @Setter
-public class User{
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+public class User extends BaseEntity{
 
     @Column(name = "user_name", length = 36, nullable = false, unique = true)
     private String userName;

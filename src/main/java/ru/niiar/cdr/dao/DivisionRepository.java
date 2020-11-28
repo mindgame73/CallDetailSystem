@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface DivisionRepository extends CrudRepository<Division, Integer> {
+public interface DivisionRepository extends CrudRepository<Division, Long> {
     Optional<Division> getByDivisionName(String str);
     List<Division> findByDivisionNameContainingIgnoreCase(String str);
     List<Division> findAllByOrderByDivisionNameAsc();

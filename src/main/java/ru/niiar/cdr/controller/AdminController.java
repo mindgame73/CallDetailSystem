@@ -29,14 +29,14 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(value = "/admin/user", method = RequestMethod.GET)
-    public User getUser(@RequestParam Integer id){
+    public User getUser(@RequestParam Long id){
         return userRepository.findById(id).get();
     }
 
     @ResponseBody
     @RequestMapping(value = "/admin/user", method = RequestMethod.POST)
     public User deleteUser(@RequestBody User user){
-        Optional<User> selected = userRepository.findById(user.getUser_id());
+        Optional<User> selected = userRepository.findById(user.getId());
         if (selected.isPresent()){
             userRepository.delete(selected.get());
             return selected.get();
@@ -48,7 +48,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/setrole", method = RequestMethod.GET)
-    public RedirectView setRoles(@RequestParam Integer userId,
+    public RedirectView setRoles(@RequestParam Long userId,
                                  @RequestParam String roleName,
                                  @RequestParam boolean flag){
         Optional<User> user = userRepository.findById(userId);
@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @RequestMapping(value="/admin/setenabled", method = RequestMethod.GET)
-        public RedirectView setEnabled(@RequestParam Integer userId,
+        public RedirectView setEnabled(@RequestParam Long userId,
                                        @RequestParam boolean flag){
 
         Optional<User> user = userRepository.findById(userId);

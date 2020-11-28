@@ -10,7 +10,7 @@ import java.util.Optional;
 
 
 @Repository
-public interface SubscriberRepository extends CrudRepository<Subscriber, Integer> {
+public interface SubscriberRepository extends CrudRepository<Subscriber, Long> {
     Optional<Subscriber> getSubscriberByFullName(String string);
     Optional<Subscriber> getSubscriberByInternalNum(int num);
     List<Subscriber> findAllByOrderByInternalNumAsc();

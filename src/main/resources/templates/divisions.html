@@ -34,16 +34,16 @@
                 </thead>
                 <tbody>
                 <th:block th:each="division : ${divisions}">
-                <tr th:id="${division.getDivision_id()}">
-                    <td th:text="${division.getDivision_id()}"></td>
-                    <td th:attr="data-id=${division.getDivision_id()}" th:text="${division.getDivisionName()}"></td>
-                    <td><a th:href="@{/subscribers(divId=${division.getDivision_id()})}"
+                <tr th:id="${division.getId()}">
+                    <td th:text="${division.getId()}"></td>
+                    <td th:attr="data-id=${division.getId()}" th:text="${division.getDivisionName()}"></td>
+                    <td><a th:href="@{/subscribers(divId=${division.getId()})}"
                     class="btn btn-primary"><i class="fas fa-users"></i></a></td>
-                    <td><a th:href="@{/calldetails(divId=${division.getDivision_id()})}"
+                    <td><a th:href="@{/calldetails(divId=${division.getId()})}"
                            class="btn btn-primary"><i class="fas fa-phone-volume"></i></a></td>
-                    <td><a th:href="@{/divisions/charts(id=${division.getDivision_id()})}"
+                    <td><a th:href="@{/divisions/charts(id=${division.getId()})}"
                            class="btn btn-primary"><i class="fas fa-chart-pie"></i></a></td>
-                    <td><a th:href="@{/roschart(id=${division.getDivision_id()})}"
+                    <td><a th:href="@{/roschart(id=${division.getId()})}"
                            class="btn btn-primary"><i class="fas fa-ruble-sign"></i></a></td>
 
                     <td><a href="#"

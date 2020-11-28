@@ -9,11 +9,7 @@ import java.io.Serializable;
 @Entity(name="subscribers")
 @Getter
 @Setter
-public class Subscriber implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer sub_id;
+public class Subscriber extends BaseEntity implements Serializable {
 
     @Column(name="full_Name")
     private String fullName;
@@ -31,7 +27,7 @@ public class Subscriber implements Serializable {
     private String room;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="division_id", referencedColumnName = "division_id")
+    @JoinColumn(name="division_id", referencedColumnName = "id")
     private Division division;
 
     @Column(name="sub_descr")

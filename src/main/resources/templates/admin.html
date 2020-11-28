@@ -22,23 +22,23 @@
                 </thead>
                 <tbody>
                 <th:block th:each="user : ${users}">
-                <tr th:id="${user.getUser_id()}">
-                    <td th:text="${user.getUser_id()}"></td>
+                <tr th:id="${user.getId()}">
+                    <td th:text="${user.getId()}"></td>
                     <td th:text="${user.getUserName()}"></td>
                     <th:block th:if="${user.isEnabled()}">
-                        <td><a th:href="@{/admin/setenabled(userId=${user.getUser_id()},flag=false)}"><i style="color:red" class="fas fa-plus"></i></a></td>
+                        <td><a th:href="@{/admin/setenabled(userId=${user.getId()},flag=false)}"><i style="color:red" class="fas fa-plus"></i></a></td>
                     </th:block>
                     <th:block th:unless="${user.isEnabled()}">
-                        <td><a th:href="@{/admin/setenabled(userId=${user.getUser_id()},flag=true)}"><i class="fas fa-minus"></i></a></td>
+                        <td><a th:href="@{/admin/setenabled(userId=${user.getId()},flag=true)}"><i class="fas fa-minus"></i></a></td>
                     </th:block>
                             <td>
                             <th:block th:if="${user.hasRole('ROLE_ADMIN')}">
                                 <span>Администратор</span>
-                                <a th:href="@{/admin/setrole(userId=${user.getUser_id()},roleName='ROLE_ADMIN',flag=false)}"><i style="color:red" class="fas fa-plus"></i></a>
+                                <a th:href="@{/admin/setrole(userId=${user.getId()},roleName='ROLE_ADMIN',flag=false)}"><i style="color:red" class="fas fa-plus"></i></a>
                             </th:block>
                             <th:block th:unless="${user.hasRole('ROLE_ADMIN')}">
                                 <span>Администратор</span>
-                                <a th:href="@{/admin/setrole(userId=${user.getUser_id()},roleName='ROLE_ADMIN',flag=true)}"><i class="fas fa-minus"></i></a>
+                                <a th:href="@{/admin/setrole(userId=${user.getId()},roleName='ROLE_ADMIN',flag=true)}"><i class="fas fa-minus"></i></a>
                             </th:block>
                     </td>
                     <td><a href="#"

@@ -37,9 +37,9 @@
                     <input type="text" th:field="*{room}" class="form-control form-control-sm" placeholder="Помещение">
                 </div>
                 <div class="col">
-                    <select th:field="*{division.division_id}" class="form-control form-control-sm">
+                    <select th:field="*{division.id}" class="form-control form-control-sm">
                         <option value="0" selected="selected">Подразделение</option>
-                        <option th:each="division : ${divisions}" th:value="${division.getDivision_id()}" th:text="${division.getDivisionName()}"></option>
+                        <option th:each="division : ${divisions}" th:value="${division.getId()}" th:text="${division.getDivisionName()}"></option>
                     </select>
                 </div>
             </div>
@@ -98,8 +98,8 @@
                 </thead>
                 <tbody>
                 <th:block th:each="subscriber : ${subscribers}">
-                <tr th:id="${subscriber.getSub_id()}">
-                    <td th:text="${subscriber.getSub_id()}"></td>
+                <tr th:id="${subscriber.getId()}">
+                    <td th:text="${subscriber.getId()}"></td>
                     <td th:text="${subscriber.getFullName()}"></td>
                     <td th:text="${subscriber.getInternalNum()}"></td>
                     <td th:text="${subscriber.getExternalNum()}"></td>

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 @Transactional
-public interface UserRepository extends CrudRepository<User,Integer> {
+public interface UserRepository extends CrudRepository<User,Long> {
     Optional<User> findUserByUserNameAndEnabledTrue(String username);
     Optional<User> findUserByUserName(String username);
     List<User> findAllByOrderByEnabledDesc();

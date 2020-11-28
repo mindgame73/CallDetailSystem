@@ -29,7 +29,7 @@ public class SubscriberController {
 
     @RequestMapping(value = "/subscribers", method = RequestMethod.GET)
     public String getSubscribers(@RequestParam(required = false) String search,
-                                 @RequestParam(required = false) Integer divId, Model model) {
+                                 @RequestParam(required = false) Long divId, Model model) {
         model.addAttribute("filterSub", new Subscriber());
         model.addAttribute("divisions", divisionRepository.findAllByOrderByDivisionNameAsc());
         if (divId != null){
@@ -78,7 +78,7 @@ public class SubscriberController {
 
     @ResponseBody
     @RequestMapping(value = "/subscribers/edit", method = RequestMethod.GET)
-    public Subscriber getEditSub(@RequestParam Integer id, Model model){
+    public Subscriber getEditSub(@RequestParam Long id, Model model){
         Subscriber subscriber = subscriberRepository.findById(id).get();
         return subscriber;
     }
@@ -87,7 +87,7 @@ public class SubscriberController {
     @ResponseBody
     @RequestMapping(value="/subscribers/update", method = RequestMethod.POST)
         public Subscriber updateSubscriber(@RequestBody Subscriber subscriber){
-        if (subscriber.getDivision().getDivision_id() == 0){
+        if (subscriber.getDivision().getId() == 0){
             subscriber.setDivision(null);
             subscriberRepository.save(subscriber);
         }
@@ -101,7 +101,7 @@ public class SubscriberController {
     @ResponseBody
     @RequestMapping(value="/subscribers/create", method = RequestMethod.POST)
     public Subscriber createSubscriber(@RequestBody Subscriber subscriber){
-        if (subscriber.getDivision().getDivision_id() == 0){
+        if (subscriber.getDivision().getId() == 0){
             subscriber.setDivision(null);
             subscriberRepository.save(subscriber);
         }
@@ -114,7 +114,7 @@ public class SubscriberController {
 
     @ResponseBody
     @RequestMapping(value = "/subscribers/delete", method = RequestMethod.GET)
-    public Subscriber getDeleteSub(@RequestParam Integer id, Model model){
+    public Subscriber getDeleteSub(@RequestParam Long id, Model model){
         Subscriber subscriber = subscriberRepository.findById(id).get();
         return subscriber;
     }
@@ -122,7 +122,7 @@ public class SubscriberController {
     @ResponseBody
     @RequestMapping(value="/subscribers/delete", method = RequestMethod.POST)
     public Subscriber deleteSubscriber(@RequestBody Subscriber subscriber){
-        subscriberRepository.deleteById(subscriber.getSub_id());
+        subscriberRepository.deleteById(subscriber.getId());
         return subscriber;
     }
 }

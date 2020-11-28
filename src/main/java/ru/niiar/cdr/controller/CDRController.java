@@ -23,9 +23,9 @@ public class CDRController {
     private DivisionRepository divisionRepository;
 
     @RequestMapping(value = "/calldetails", method = RequestMethod.GET)
-    public String getCallDetailRecords(@RequestParam(required = false) Integer id,
+    public String getCallDetailRecords(@RequestParam(required = false) Long id,
                                        @RequestParam(required = false) String search,
-                                       @RequestParam(required = false) Integer divId,
+                                       @RequestParam(required = false) Long divId,
                                        Model model) {
         CallDetailRecord cdr = new CallDetailRecord();
         if (divId != null){

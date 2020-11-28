@@ -19,7 +19,7 @@ $(document).on('click','.ajax-delete-user', function () {
         url: "/admin/user",
         data: "id=" + id,
         success: function (user) {
-            $('#del_user_id').val(user.user_id);
+            $('#del_user_id').val(user.id);
 
             $('.modal-body-confirm').html("<strong style='color:red'>Подтвердите удаление пользователя</strong><br><br>" +
                 "<strong>Имя пользователя </strong>" + user.userName + "<br><br>");
@@ -36,7 +36,7 @@ $(document).on('click','.delete-ajax-div', function () {
         url: "/divisions/delete",
         data: "id=" + id,
         success: function (div) {
-            $('#del_div_id').val(div.division_id);
+            $('#del_div_id').val(div.id);
 
             $('.modal-body-confirm').html("<strong style='color:red'>Подтвердите удаление подразделения</strong><br><br>" +
                 "<strong>Название подразделения: </strong>" + div.divisionName + "<br><br>");
@@ -52,7 +52,7 @@ $(document).on('click','.ajax-delete-sub', function () {
         url: "/subscribers/delete",
         data: "id=" + id,
         success: function (sub) {
-            $('#del_sub_id').val(sub.sub_id);
+            $('#del_sub_id').val(sub.id);
             if (sub.fullName == null)
                 var name = "";
             else
@@ -86,7 +86,7 @@ $(document).on('click','.ajax-edit-sub',function () {
         data: "id="+ id,
         success: function(sub){
             $('.edit-form')[0].reset();
-            $('#sub_id').val(sub.sub_id);
+            $('#sub_id').val(sub.id);
             $('#_fullName').val(sub.fullName);
             $('#_internalNum').val(sub.internalNum);
             $('#_externalNum').val(sub.externalNum);
@@ -101,7 +101,7 @@ $(document).on('click','.ajax-edit-sub',function () {
             $('#_isSip').attr('checked',sub.sip);
 
             if (sub.division != null) {
-                var div_id = sub.division.division_id;
+                var div_id = sub.division.id;
             }
             else
             {
@@ -116,17 +116,17 @@ $(document).on('click','.ajax-edit-sub',function () {
 
                     for (var i=0; i < divs.length; i++) {
                         if (sub.division != null){
-                            if (div_id === divs[i].division_id){
-                                options.append('<option selected="selected" value="' + divs[i].division_id + '">' + divs[i].divisionName + '</option>');
+                            if (div_id === divs[i].id){
+                                options.append('<option selected="selected" value="' + divs[i].id + '">' + divs[i].divisionName + '</option>');
                             }
                             else
                             {
-                                options.append('<option value="' + divs[i].division_id + '">' + divs[i].divisionName + '</option>');
+                                options.append('<option value="' + divs[i].id + '">' + divs[i].divisionName + '</option>');
                             }
                         }
                         else
                         {
-                            options.append('<option value="' + divs[i].division_id + '">' + divs[i].divisionName + '</option>');
+                            options.append('<option value="' + divs[i].id + '">' + divs[i].divisionName + '</option>');
                         }
 
                     }
@@ -165,7 +165,7 @@ $(document).on('click','.ajax-edit-div',function () {
         data: "id="+ id,
         success: function(div){
             $('.edit-div')[0].reset();
-            $('#_division_id').val(div.division_id);
+            $('#_division_id').val(div.id);
             $('#_divisionName').val(div.divisionName);
             $('#edit-modal-div').modal();
         }
@@ -250,13 +250,13 @@ $('#btn-edit-div').click(function () {
 $('#btn-save').click(function () {
     var data = {};
     var divisionObj = {};
-    data["sub_id"] = $('#sub_id').val();
+    data["id"] = $('#sub_id').val();
     data["fullName"] = $('#_fullName').val();
     data["internalNum"] = $('#_internalNum').val();
     data["externalNum"] = $('#_externalNum').val();
     data["building"] = $('#_building').val();
     data["room"] = $('#_room').val();
-    divisionObj["division_id"] = $('#_division option:selected').val();
+    divisionObj["id"] = $('#_division option:selected').val();
     divisionObj["divisionName"] = $('#_division option:selected').text();
     data["subDescr"] = $('#_info').val();
     data["gpStrip"] = $('#_gpStrip').val();
@@ -275,7 +275,7 @@ $('#btn-save').click(function () {
         dataType: 'json',
         timeout: 600000,
         success: function (p) {
-            var row = document.getElementById(p.sub_id);
+            var row = document.getElementById(p.id);
             if (p.division != null) var divisionName = p.division.divisionName;
             if (p.digital)
                 var digital = "<i class='fas fa-plus'></i>";
@@ -292,10 +292,12 @@ $('#btn-save').click(function () {
             var edit = "<a href= \"#\" class='btn btn-primary btn-sm ajax-edit-sub'><i class='fas fa-user-edit sm-2'></i></a>";
             var delet = "<a href= \"#\" class='btn btn-primary btn-sm ajax-delete-sub'><i class='fas fa-user-times sm-2'></i></a>";
 
+            internalNum = (p.internalNum != null) ? p.internalNum : "";
+            externalNum = (p.externalNum != null) ? p.externalNum : "";
 
             row.innerHTML =
-                "<td>" + p.sub_id +"</td><td>​"+ p.fullName +"</td><td>"+ p.internalNum +"</td>" +
-                "<td>"+ p.externalNum +"</td><td>"+ p.building +"</td><td>"+ p.room +"</td>" +
+                "<td>" + p.id +"</td><td>"+ p.fullName +"</td><td>"+ internalNum +"</td>" +
+                "<td>"+ externalNum +"</td><td>"+ p.building +"</td><td>"+ p.room +"</td>" +
                 "<td>"+ divisionName +"</td><td>"+ p.subDescr +"</td><td>"+ p.gpStrip +"</td>" +
                 "<td>"+ p.allocation +"</td><td>"+ digital +"</td><td>"+ p.cos +"</td><td>"+ fax +"</td>" +
                 "<td>"+ sip +"</td><td>"+ edit +"</td><td>"+ delet +"</td>";
@@ -332,7 +334,7 @@ $('#btn-create').click(function () {
     data["externalNum"] = $('#c_externalNum').val();
     data["building"] = $('#c_building').val();
     data["room"] = $('#c_room').val();
-    divisionObj["division_id"] = $('#c_division option:selected').val();
+    divisionObj["id"] = $('#c_division option:selected').val();
     divisionObj["divisionName"] = $('#c_division option:selected').text();
     data["subDescr"] = $('#c_info').val();
     data["gpStrip"] = $('#c_gpStrip').val();
@@ -379,7 +381,7 @@ $('#btn-create').click(function () {
 
 $('#btn-delete').click(function () {
     var data = {};
-    data["sub_id"] = $('#del_sub_id').val();
+    data["id"] = $('#del_sub_id').val();
     $.ajax({
         type: "POST",
         contentType: "application/json",

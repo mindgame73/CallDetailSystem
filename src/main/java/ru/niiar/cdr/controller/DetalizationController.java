@@ -54,7 +54,7 @@ public class DetalizationController {
             model.addAttribute("rosDetalizations", rosDetalizations);
         }
         else if (action.equals("import")){
-            if (rosDetalizationRepository.findByDateTimeIsContaining(rosDetalizations.get(1).getDateTime()) == null){
+            if (rosDetalizationRepository.findByDateTimeIsContaining(rosDetalizations.get(1).getDateTime().toString()) == null){
                rosDetalizationRepository.saveAll(rosDetalizations); // требуется доработать проверку на существующие записи
             }
             else
@@ -111,7 +111,7 @@ public class DetalizationController {
     }
 
     @RequestMapping(value = "/roschart", method = RequestMethod.GET)
-    public String getChartView(@RequestParam(required = false) Integer id,
+    public String getChartView(@RequestParam(required = false) Long id,
                                @RequestParam(required = false) String monthId,
                                @RequestParam(required = false) String year,
                                Model model){
@@ -147,7 +147,7 @@ public class DetalizationController {
                     .findAllBySubscriberDivision(selected);
 
                 String yearMonth = year.concat("-").concat(monthId);
-                rosDetalizations.removeIf(ros -> !ros.getDateTime().substring(0, 7).equals(yearMonth));
+                rosDetalizations.removeIf(ros -> !ros.getDateTime().toString().substring(0, 7).equals(yearMonth));
 
 
             model.addAttribute("showTable", true);
@@ -159,7 +159,7 @@ public class DetalizationController {
     }
 
     @RequestMapping(value="/roschart/savexls", method = RequestMethod.GET)
-        public RedirectView saveToXls(@RequestParam Integer id){
+        public RedirectView saveToXls(@RequestParam Long id){
             Division division = divisionRepository.findById(id).get();
             RosDetalizationWrapper wrapper =
                     new RosDetalizationWrapper(rosDetalizationRepository.findAllBySubscriberDivision(division),
@@ -212,7 +212,7 @@ public class DetalizationController {
 
             RosDetalization rosDetalization = new RosDetalization();
             rosDetalization.setNumberA(Long.parseLong(lineArray[0]));
-            rosDetalization.setDateTime(lineArray[1] + ":00");
+            //rosDetalization.setDateTime(lineArray[1] + ":00");
             rosDetalization.setRoute(lineArray[3]);
             rosDetalization.setNumberB(Long.parseLong(lineArray[4]));
             rosDetalization.setDuration(Integer.parseInt(lineArray[5]));

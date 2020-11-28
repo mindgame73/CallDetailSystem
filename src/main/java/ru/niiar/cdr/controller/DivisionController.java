@@ -57,7 +57,7 @@ public class DivisionController {
     }
 
     @RequestMapping(value = "/divisions/charts", method = RequestMethod.GET)
-    public String getChartView(@RequestParam(required = false) Integer id,
+    public String getChartView(@RequestParam(required = false) Long id,
                                @RequestParam(required = false) String monthId,
                                @RequestParam(required = false) String year,
                                Model model){
@@ -93,7 +93,7 @@ public class DivisionController {
 
             if (monthId != null && year != null) {
                 String yearMonth = year.toString().concat("-").concat(monthId.toString());
-                cdrs.removeIf(cdr -> !cdr.getStartTime().substring(0, 7).equals(yearMonth));
+//                cdrs.removeIf(cdr -> !cdr.getStartTime().substring(0, 7).equals(yearMonth));
             }
 
             model.addAttribute("showTable", true);
@@ -114,7 +114,7 @@ public class DivisionController {
 
     @ResponseBody
     @RequestMapping(value = "/divisions/edit", method = RequestMethod.GET)
-    public Division getEditDivision(@RequestParam Integer id){
+    public Division getEditDivision(@RequestParam Long id){
         Division division = divisionRepository.findById(id).get();
         return division;
     }
@@ -128,7 +128,7 @@ public class DivisionController {
 
     @ResponseBody
     @RequestMapping(value = "/divisions/delete", method = RequestMethod.GET)
-    public Division getDeleteDiv(@RequestParam Integer id){
+    public Division getDeleteDiv(@RequestParam Long id){
         Division division = divisionRepository.findById(id).get();
         return division;
     }

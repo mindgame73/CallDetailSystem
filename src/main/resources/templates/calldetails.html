@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                 <tr th:each="cdr : ${cdrs}">
-                    <td th:text="${cdr.getCall_id()}"></td>
+                    <td th:text="${cdr.getId()}"></td>
                     <td th:text="${cdr.getBoard_cdr_id()}"></td>
                     <td th:text="${cdr.getStartTime()}"></td>
                     <td th:text="${cdr.getStopTime()}"></td>
