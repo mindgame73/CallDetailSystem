@@ -17,7 +17,7 @@ services:
     container_name: cdr-niiar
     image: call_detail_system
     volumes:
-    - "${CDR_ROOT_DIRECTORY}:/home/cdr/"
+    - ./:/home/cdr/
     environment:
       - SPRING_PROFILES_ACTIVE=CONTAINER
     ports:
