@@ -15,6 +15,7 @@ services:
   app:
     build: .
     container_name: cdr-niiar
+    restart: always
     image: call_detail_system
     volumes:
     - ./:/home/cdr/
